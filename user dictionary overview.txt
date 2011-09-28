@@ -1,0 +1,22 @@
+NOTES:
+"absolute" means, starting from the KEYBOARDs x position, NOT the windows x position.
+
+
+## Keyboard Touches ##
+  graphical data:
+["initial_key"]["keynumber_absolute"] = number of first pressed key: starting from 0 as the lowest note of the visible (5-octave) keyboard
+["initial_key"]["keyposition_absolute_x"] = pixel position of first pressed key: starting from 0 as the left edge of the lowest note of the visible (5-octave) keyboard
+["blob"] = contains the blob-widget of this touch
+["keys"] = contains a list of all keys illuminated by this touch (after they fade out, they are removed from this list)
+
+  needed by the round algorithm:
+["finger_position"] = current absolute fingerposition in pixels
+["rounded_key"] = current perfect key position under the finger (= in the middle of the key)
+["key_moving"] = false or true: if the pixel threshold is exceeded, it gets true
+["current_position"] = the actual position calculated by the rounding algorithm and to be sent over midi (after the pixelposition -> pitch height calculation)
+["old_position"] = the old value of "current_position"
+["vibrato"] = false or true (not yet implemented): gives the possibility of doing vibrato with perfect centered ("computer aided") pitch, regardless of whether pitch lock ("full rounding") is active or not.
+
+
+## Scroll Touches ##
+["scroll"] = True

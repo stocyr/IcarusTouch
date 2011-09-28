@@ -1,0 +1,31 @@
+TouchContinuumApp(App)
+|
++-> TouchContinuumWidget(Widget)
+    |
+    +-> Image "Background"
+    |
+    +-> Image "Feedback Wall"
+    |
+    +-> FloatLayout "all aligned widgets"
+    |   |
+    |   +-> BoxLayout "Logo Box"
+    |   |   |
+    |   |   +-> Image "Logo"
+    |   |   |
+    |   |   +-> Label "App Name + Kivy Version"
+    |   |
+    |   +-> Label "Cyril Stoller"
+    |   |
+    |   +-> BoxLayout
+    |   |   |
+    |   |   +-> 2x Buttons
+    |   |
+    |   +-> BoxLayout
+    |       |
+    |       +-> 2x Buttons
+    |
+    +-> Image "Keyboard"
+        |
+        +-> all existing Blobs (Image)
+        |
+        +-> all esisting Keys (Stencil)

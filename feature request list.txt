@@ -1,0 +1,111 @@
+####################
+Feature Request List
+####################
+
+(sorted after priority)
+
+
+FUNCTIONAL
+---------------
+
+- Implement a value-check after on_config_change --> body is existent
+  --> If I use the kivy.utils.boundary-function for limiting the settings-values, entering a '0' for the MIDI channel in the app settings causes
+      the following error: "TypeError: argument of type 'int' is not iterable". Why? The "Boundary" uses: return min(max(value, minvalue), maxvalue)
+
+- add the capability to zoom/scale the keyboard on the x axis (if two fingers are in scroll-mode and are dragged towards each other or vice versa --> apply zoom in/out)
+  - snap to three or four predefined key-widths like 45px, 50px, 55px, 60px (i've now 50px)
+  --> the routine is already existing, but the actual zoom action is commented out right now
+
+- code refactoring:
+  - maybe we can get the dispatching system more elgant with touch grabbing an so on
+  - optimize the behaviour in touch_move: self.calculate_key is calculated two times with equal values, one for the rounding algorithm, one for the illumination function
+  - optimize rounding algorithm (maybe for even better latency): do NOT make all calculations only in the scheduled function, but if a touch_move rises, stop scheduling,
+    do the calculation AND the midi stuff right there (faster). Then, when the calculation is done, restart the scheduler.
+  - implement key, blob and circle as separate classes.
+
+- rounding algorithm optimizing: by now, the output glues on the finger if the last move event wasn't long time ago ("time" = MOVINGDECAY). But couldn't we add
+  another "glue to finger"-rule: if there is a big movement happening, react instantly to that?
+  --> another idea from http://www.youtube.com/user/metabog: Define a dead zone in the middle of each key. I this zone is leaved, stop rounding.
+
+- thumbnail functionality - code exists almost completely but several things have to be done yet:
+  - If it works, don't create the panel in the startup code of TouchContinuumWidget but in the first call of OpenMySettingsPanel.
+  - Check if there are problems with path splitting between unix and windows
+  - make the shit working!
+
+- make more with the canvas painting capability instead of images... Especial on the universal_key, which is only a white rectangle at the moment
+
+- make the settings "MonoMode" and "CCController", which are both inactive in certain situations, changing their "disabled" property.
+
+
+
+GRAPHICAL
+---------------
+
+- I have to set the height of the FileChooserListView instance in the ScrollView myself to a fixed value. That isn't cool at all! Can't we take the optimum height of the fileChooser?
+
+- Design a logo for the application
+
+- reduce the filesize of the key images full png (they're not realy compressed now). compression is not a problem here
+
+- arrange dimensions and positions dynamically (for example with self.center = win.Window.center)
+  - try to make a layout which also looks suitable on smart phones (think ahead :) )
+
+- move the background image WITH the keyboard, but not as fast as the keyboard (à la android "desktop" design)
+
+- maybe embed the keyboard in a scroll_view box to achieve a glide effect.
+  - then maybe we could snap the keyboard position to whole octaves?
+
+- maybe it would be cool to let the settingspanel glide in from the left / right border --> expo.
+
+- unaesthetic: on fast glides, some keys are not covered by the on_touch_move routine because of too big dx distances.
+  --> ask if dx exceeded the key width (which would mean that at least one key has been skipped).
+      then illuminate all the keys between the two points.
+      --> but: is it necessary? Or is it needless performance wasting? --> routine body existing in on_touch_move of the keyboard.
+
+- maybe add the feature to select "global color" - that will affect the feedbackwall color, the key color and the blob color...
+
+- little gimmick: if the user touches the screen with 4 or 5 fingers in a range of about 20cm, build a cool shimmering circle through all finger touches.
+  With this circle, the user can now control several things:
+  - with the radius of the circle, we could add aftertouch (fully, initially radius = 0, fingers totally together = 127)
+  	- we could even add vibrato if the user makes the radius bigger --> smaller = add aftertouch, bigger = add vibrato
+  - if the user rotates the circle, we could add some modulation or vibrato
+  - maybe we could also get some informations on the circles position, but it would also be cool to move the circle with the hand and nothing happends (only on radius / rotation changes)
+
+
+
+OTHER
+----------------
+
+- Document it:
+  -> Make technical documentation: it contains a diagram of the signal path. Shows latencies (with a time axis to visualize the proportions)
+  -> Make a well designed manual (out of the readme file)
+
+- Set up a cool website for the app. It would offer the following:
+  - the latest source and binaries for all platforms
+  - a manual and maybe a technical documentation (see above)
+  - users can upload their latest performance videos
+  - a forum where they can discuss new features, playing technics, hardware / software / sound suggestions
+  - a section for sharing custom keyboard images / background images
+  - a section with the top 10 (user-voted) print-screens / Photos of performance or image design
+  - links to bands / musicians who use the app
+  - links to other similar projects
+  - a link to the github repository
+  --> realisation:
+    - I myself find the kivy.org page pretty professional looking and well-arranged
+    - I think github offers to host a little website, but I've no idea if this is enough (I'm pretty poor at web-based knowledge...)
+  --> benefits:
+    - much more publicity on the web
+    - a central place where all the different kinds of users (programmers, musicians, other freaks and nerds...) can meet
+
+
+
+
+
+
+
+####################
+Known bugs
+####################
+- FileChooser Error: If I start from a custom path and go 2 directories up and one down, this directory can't be found anymore??
+- for the SettingFile and SettingMIDI instance there is no value displayed on the app settings panel. Why?
+- the background image isn't fitting the window size properly... description in the kv-file, background image class description. Why?
