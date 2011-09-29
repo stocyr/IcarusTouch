@@ -137,7 +137,7 @@ class TouchContinuumWidget(Widget):
         self.keyboard = Keyboard(
             source=self.app.config.get('Graphics', 'Keyboard'),
             pos=(-540, 366),
-            size=(12*5*my_key_width, 468), #468 if self.get_parent_window().height > 
+            size=(12*5*my_key_width, 468), # optimisation for small screens (e.g. smartphones): 468 if self.get_parent_window().height > (468 + self.get_parent_window().height * 0.3) else self.get_parent_window().height * 0.7
             border_width=BORDER_WIDTH,
             key_width=my_key_width)
         self.add_widget(self.keyboard)
@@ -162,12 +162,12 @@ class TouchContinuumWidget(Widget):
         
         # find out the touchs "function":  
         if self.my_settings_panel.is_open == True:
-            
+            # if the settingspanel is opened, it has total focus!
+            # so if the user clicked on one of the two panels, don't dispatch the touch here but feed it to the panel
             if self.my_settings_panel.keyboard_scroll_view_box.collide_point(*touch.pos) or \
                 self.my_settings_panel.background_scroll_view_grid.collide_point(*touch.pos):
                 ud['settingspanel'] = True
                 return super(TouchContinuumWidget, self).on_touch_down(touch)
-            
             else:
                 # user has clicked aside - he wants to quit the settings.
                 self.remove_widget(self.my_settings_panel)
@@ -175,16 +175,22 @@ class TouchContinuumWidget(Widget):
                 return True
             
         elif self.keyboard.collide_point(*touch.pos):
+            # if the user touched on the keyboard, feed the touch to the keyboard.
             return super(TouchContinuumWidget, self).on_touch_down(touch)
         
         elif self.pitch_lock_button.collide_point(*touch.pos) or \
             self.y_axis_volume_button.collide_point(*touch.pos) or \
             self.look_button.collide_point(*touch.pos) or \
             self.settings_button.collide_point(*touch.pos):
+            # if the user touched one of the buttons, feed the touch to the buttons
             self.create_circle(touch)
             return super(TouchContinuumWidget, self).on_touch_down(touch)
-            
-        # if it wasn't a button nor a key touch, its a scroll touch.
+        
+        ##########################
+        # X-Axis Key width scaling
+        ##########################
+        
+        # if it wasn't a button nor a key touch nor a settings touch, its a scroll touch.
         for search_touch in EventLoop.touches[:]:
                     # but if there is already another touch in scroll mode (and not already in 'scale' mode), maybe the desired action is 'scale' not 'scroll'
                     if 'scroll' in search_touch.ud and not self.scale_keywidth_touch_positions:
@@ -192,9 +198,10 @@ class TouchContinuumWidget(Widget):
                         self.scale_keywidth_touch_positions = {'initial_first': search_touch.x, 'initial_second': touch.x, 'first_touch': search_touch, 'second_touch': touch}
                         print 'multiple saving position data'
         
+        # assign the scroll-tag not until here. Thus we just get the other existing scroll-touches in the search-routine above.
         ud['scroll'] = True
         
-        # if there is an keyboard "spring back" animation in progress, stop it.
+        # if there was an keyboard "spring back" animation in progress, stop it.
         self.keyboard.keyboard_x_animation.stop(self.keyboard)
     
     
@@ -208,8 +215,11 @@ class TouchContinuumWidget(Widget):
     def on_touch_move(self, touch):
         ud = touch.ud
         
+        ##########################
+        # X-Axis Key width scaling
+        ##########################
         
-        # if there are two fingers in scroll mode (thus the dict 'scale_keywidth_touch_positions' isn't empty) - maybe he wants to scale the keywidth?   
+        # if there are two fingers in scroll mode (thus the user dictionary key 'scale_keywidth_touch_positions' isn't empty) - maybe he wants to scale the keywidth?   
         scalepos = self.scale_keywidth_touch_positions
         if scalepos:
             delta_first_touch = scalepos['first_touch'].x - scalepos['initial_first']
@@ -242,15 +252,11 @@ class TouchContinuumWidget(Widget):
         
                 
         elif 'scroll' in ud:
-            # move keyboard left or right. Make sure to move also the shadow border around it
+            # move keyboard left or right.
             # nice side effect: if there is more than 1 touch in 'scroll' mode, scrolling is faster!
-            
-            # is an animation in progress?`--> stop it.
-            #self.keyboard.keyboard_x_animation.stop()
-            
-            # if the end of the keyboard is visible, scroll slower!
             scroll_factor = 1
             
+            # if the end of the keyboard is visible, scroll slower!
             if self.keyboard.x > 0 or self.keyboard.x < (self.get_parent_window().width - self.keyboard.width):
                 counter = 0
                 for touch in EventLoop.touches[:]:
@@ -260,6 +266,7 @@ class TouchContinuumWidget(Widget):
                 # if there is more than one touch in scroll mode, i don't want the factor to grow!
                 scroll_factor = SCROLLING_STICKY_FACTOR / counter
             
+            # apply the scroll action
             self.keyboard.x += touch.dx * scroll_factor
             return
         
@@ -310,22 +317,27 @@ class TouchContinuumWidget(Widget):
     ####################################
     '''
     def on_y_axis_volume_button_press(self):
+        # apply the visible button-state also to the application settings
         if self.y_axis_volume_button.state == 'down':
+            # Y axis => volume
             self.app.config.set('General', 'YAxis', 'Volume')
             # lock aftertouch to 0:
             self.midi_out.write_short(0xD0, 0)
         else:
+            # Y axis => aftertouch
             self.app.config.set('General', 'YAxis', 'Aftertouch')
-            # lock Y-modulation to 0?
+            # lock Y-modulation to 127
             self.midi_out.write_short(0xB0, 1, 127)
     
     def on_pitch_lock_button_press(self):
+        # apply the visible button-state also to the application settings
         if self.pitch_lock_button.state == 'down':
             self.app.config.set('General', 'PitchLock', 'On')
         else:
             self.app.config.set('General', 'PitchLock', 'Off')
     
     def open_settings(self):
+        # is called from the rightmost button (the "setup" button") --> function call binding in the .kv file
         self.app.open_settings()
     
     
@@ -337,23 +349,25 @@ class TouchContinuumWidget(Widget):
     ####################################
     '''
     def create_circle(self, touch):
+        # create the circle image
         circle = Image(
             source=self.app.config.get('Advanced', 'CircleImage'),
             color=CIRCLE_IMAGE_COLOR,
             allow_stretch=True,
             size=(self.app.config.getint('Advanced', 'CircleSize'), self.app.config.getint('Advanced', 'CircleSize')))
         
+        # center the circle on the finger position
         circle.x = touch.x - circle.size[0] / 2
         circle.y = touch.y - circle.size[1] / 2
         
         self.add_widget(circle)
         
-        # and just right fade it out after displayed
+        # and just right fade it out after having displayed it
         animation = Animation(
             color=CIRCLE_IMAGE_COLOR_TRANSPARENT,
             size=(self.app.config.getint('Advanced', 'CircleSize') * 2, self.app.config.getint('Advanced', 'CircleSize') * 2),
-            x=circle.pos[0] - (self.app.config.getint('Advanced', 'CircleSize')/2), # workarround for centering the image during resizing
-            y=circle.pos[1] - (self.app.config.getint('Advanced', 'CircleSize')/2), # workarround for centering the image during resizing
+            x=circle.pos[0] - (self.app.config.getint('Advanced', 'CircleSize')/2), # workaround for centering the image during resizing
+            y=circle.pos[1] - (self.app.config.getint('Advanced', 'CircleSize')/2), # workaround for centering the image during resizing
             t='out_expo', duration=CIRCLE_IMAGE_FADEOUT_TIME)
         
         animation.start(circle)
@@ -416,7 +430,7 @@ class TouchContinuumWidget(Widget):
     def background_image_change(self, dispatcher):
         old_background_instance = self.background
         
-        # if the last background change is stil in progress, stop it and start the new.
+        # if the last background change is still in progress, stop it and start the new one.
         if old_background_instance.background_is_animated == True:
             old_background_instance.new_background_change_animation.stop(old_background_instance.new_background_instance)
             old_background_instance.old_background_change_animation.stop(old_background_instance)
@@ -425,16 +439,18 @@ class TouchContinuumWidget(Widget):
             old_background_instance.new_background_instance.color = (1, 1, 1, 1)
             old_background_instance = old_background_instance.new_background_instance
         
+        # create the new image instance
         old_background_instance.new_background_instance = Background(
             source=dispatcher.background_normal,
             color=(1, 1, 1, 0))
+        # add the new instance to the root widget. BUT add it on the bottom (therefore I set the index myself)
         self.float_layout.add_widget(old_background_instance.new_background_instance, index=len(self.float_layout.children))
         
         # keep the settings panel on the front
         self.remove_widget(self.my_settings_panel)
         self.add_widget(self.my_settings_panel)
         
-        
+        # let the old image fade out while the new one fades in.
         old_background_instance.new_background_change_animation = Animation(color=(1, 1, 1, 1), duration=BACKGROUND_CHANGE_DURATION)
         old_background_instance.old_background_change_animation = Animation(color=(1, 1, 1, 0), duration=BACKGROUND_CHANGE_DURATION)
         
@@ -469,6 +485,7 @@ class TouchContinuumWidget(Widget):
             old_keyboard_instance.new_keyboard_instance.y = 366
             old_keyboard_instance = old_keyboard_instance.new_keyboard_instance
         
+        # create the new image instance
         old_keyboard_instance.new_keyboard_instance = Keyboard(
             source=dispatcher.background_normal,
             pos=(old_keyboard_instance.x, win.height + BORDER_WIDTH),
@@ -481,7 +498,7 @@ class TouchContinuumWidget(Widget):
         self.remove_widget(self.my_settings_panel)
         self.add_widget(self.my_settings_panel)
         
-        
+        # let the old image fade out while the new one fades in.
         old_keyboard_instance.new_keyboard_change_animation = Animation(y=366, t='out_back', duration=KEYBOARD_CHAGE_DURATION)
         old_keyboard_instance.old_keyboard_change_animation = Animation(y=-(self.keyboard.height + BORDER_WIDTH), t='out_back', duration=KEYBOARD_CHAGE_DURATION)
         
@@ -515,24 +532,31 @@ class TouchContinuum(App):
     
     
     def build(self):
+        # print the application informations
         print '\nTouchContinuum v%s  Copyright (C) 2011  Cyril Stoller' % VERSION
         print 'This program comes with ABSOLUTELY NO WARRANTY'
         print 'This is free software, and you are welcome to redistribute it'
         print 'under certain conditions; see the source code for details.\n'
         
+        # TODO: what about a popup saying you have to wait?
         '''
         root = Popup(title='Loading images',
                       content=Label(text='Please wait...'),
                       size_hint=(None, None),
                       size=(400, 400))
         '''
+        
+        # in lack of a popup, print it to the console
         print 'Loading images... Please wait.'
         
+        # create the root widget and give it a reference of the application instance (so it can access the application settings)
         self.touchcontinuumwidget = TouchContinuumWidget(app=self)
         return self.touchcontinuumwidget
     
    
     def build_config(self, config):
+        # create the various section for the .ini settings file:
+        
         config.add_section('General')
         config.set('General', 'YAxis', 'Aftertouch')
         config.set('General', 'PitchLock', 'Off')
@@ -553,6 +577,7 @@ class TouchContinuum(App):
         config.set('MIDI', 'CCController', '1') # inactive if y-axis is 'aftertouch'
         
         
+        # the Advanced section contains mainly values used for debugging and optimizing
         config.add_section('Advanced')
         config.set('Advanced', 'BlobImage', 'images/blob_blue.png')
         config.set('Advanced', 'BlobSize', '60')
@@ -569,9 +594,14 @@ class TouchContinuum(App):
     
     
     def build_settings(self, settings):
+        # register my two custom settingItem classes
         settings.register_type('midi', SettingMIDI)
         settings.register_type('file', SettingFile)
         
+        # set up the built in settings panel for the application settings (not to be confused with the mySettingsPanel for the appearance settings,
+        # for which i developed a custom panel). The sections and keys are exactly the same.
+        
+        #section "General"
         settings.add_json_panel(
             'General', self.config, data='''[
                     { "type": "options", "title": "Y axis", "desc": "MIDI modulation based on the Y axis", "section": "General", "key": "YAxis", "options": ["Aftertouch", "Volume"]},
@@ -580,6 +610,7 @@ class TouchContinuum(App):
                     { "type": "title", "title": "(Settings marked with a * are not yet implemented)" }
             ]''')
         
+        #section "Graphics"
         settings.add_json_panel(
             'Graphics', self.config, data='''[
                     { "type": "file", "title": "Keyboard", "desc": "Image used as keyboard", "section": "Graphics", "key": "Keyboard", "file_filter": ["*.png", "*.jpg"], "path": "keyboards"},
@@ -587,6 +618,7 @@ class TouchContinuum(App):
                     { "type": "title", "title": "(Settings marked with a * are not yet implemented)" }
             ]''')
         
+        #section "MIDI"
         settings.add_json_panel(
             'MIDI', self.config, data='''[
                     { "type": "midi", "title": "MIDI output device", "desc": "Device to use for MIDI", "section": "MIDI", "key": "Device"},
@@ -598,6 +630,7 @@ class TouchContinuum(App):
                 { "type": "title", "title": "(Settings marked with a * are not yet implemented)" }
             ]''')
         
+        #section "Advanced"
         settings.add_json_panel(
             'Advanced', self.config, data='''[
                 { "type": "title", "title": "Advanced graphic settings" },
@@ -615,15 +648,18 @@ class TouchContinuum(App):
                     { "type": "bool", "title": "Show pitch line", "desc": "Show a line that indicates the pitch sent to the MIDI device", "section": "Advanced", "key": "ShowPitchLine", "values": ["Off", "On"]},
                 { "type": "title", "title": "(Settings marked with a * are not yet implemented)" }
             ]''')
-        
+    
     
     def on_config_change(self, config, section, key, value):
+        # here comes all the value-checking stuff after a new value has been set.
         token = (section, key)
         
         if token == ('General', 'YAxis'):
+            # set the buttons to sync up with the settings
             self.touchcontinuumwidget.y_axis_volume_button.state = 'normal' if value == 'Aftertouch' else 'down'
             self.touchcontinuumwidget.on_y_axis_volume_button_press()
         elif token == ('General', 'PitchLock'):
+            # set the buttons to sync up with the settings
             self.touchcontinuumwidget.pitch_lock_button.state = 'normal' if value == 'Off' else 'down'
             self.touchcontinuumwidget.on_pitch_lock_button_press()
         elif token == ('General', 'MonoMode'): # inactive if voice mode is 'polyphonic'
@@ -631,8 +667,10 @@ class TouchContinuum(App):
         
         
         elif token == ('Graphics', 'Background'):
+            # change the background image like with an opened mySettingsPanel
             self.touchcontinuumwidget.background_image_change(value)
         elif token == ('Graphics', 'Keyboard'):
+            # change the keyboard image like with an opened mySettingsPanel
             self.touchcontinuumwidget.keyboard_image_change(value)
         
         
@@ -640,6 +678,7 @@ class TouchContinuum(App):
             self.touchcontinuumwidget.set_midi_device()
         elif token == ('MIDI', 'Channel'):
             # setting the value to 0 here causes an error?!
+            # config.set('MIDI', 'Channel', boundary(value, 0, 15)
             pass
         elif token == ('MIDI', 'VoiceMode'):
             pass
@@ -675,6 +714,7 @@ class TouchContinuum(App):
             pass
     
     def print_widget_tree(self):
+        # not used but pretty useful function for illustrating the widget tree
         print '#################################'
         print '##         Widget Tree         ##'
         print '#################################\n'

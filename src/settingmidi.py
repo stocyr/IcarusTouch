@@ -69,25 +69,26 @@ class SettingMIDI(SettingItem):
     def _set_option(self, instance):
         self.value = instance.text
         # don't set the MIDI output here, but in the on_setting_change function!
-        
         self.popup.dismiss()
 
     def _create_popup(self, instance):
-        # create the popup
+        # create the popup containing a BoxLayout
         content = BoxLayout(orientation='vertical', spacing=10)
         self.popup = popup = Popup(content=content,
             title=self.title, size_hint=(None, None), size=(400, 400))
         popup.height = pygame.midi.get_count() * 30 + 150
 
-        # add all the options
+        # add a spacer
         content.add_widget(Widget(size_hint_y=None, height=1))
         uid = str(self.uid)
         
         device_count = pygame.midi.get_count()
         
+        # add all the selectable MIDI output devices
         for i in range(device_count):
             if pygame.midi.get_device_info(i)[3] == 1 and (pygame.midi.get_device_info(i)[4] == 0 or pygame.midi.get_device_info(i)[1] == self.value):
-                # if it's an output device and it's not already opened (unless it's the device opened by ME), display it in list
+                # if it's an output device and it's not already opened (unless it's the device opened by ME), display it in list.
+                # if this is the device that was selected before, display it pressed
                 state = 'down' if pygame.midi.get_device_info(i)[1] == self.value else 'normal'
                 btn = ToggleButton(text=pygame.midi.get_device_info(i)[1], state=state, group=uid)
                 btn.bind(on_release=self._set_option)

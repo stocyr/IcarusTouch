@@ -8,12 +8,28 @@ For informations on the Kivy framework, please refer to http://kivy.org
 To install Kivy on your computer, see the Kivy documentation at
 http://kivy.org/docs/installation/installation.html
 
-...or read the next section which is a heavily summarized version of the above
-one.
+...or, for windows, read the section "Getting Started under Windows" which is a
+heavily summarized version of the above one.
 
 
 ################################################################################
-Getting started under Windows
+About TouchContinuum
+################################################################################
+
+This application is a multitouch instrument in form of a virtual piano keyboard.
+It is able to handle the tone pitch in a "continuous" manner. Means, you can
+drag a pressed note up and down the keyboard to change its pitch as well as
+back and forward to apply some modulation on the tone.
+
+The application is made in honor of the great but also costly Haaken Continuum
+Fingerboard.
+
+NOTE: This application only features a MIDI output to connect to a hardware or
+software synthesizer. THERE ARE NO INTERNAL SOUNDS AT THE MOMENT!
+
+
+################################################################################
+Getting Started under Windows
 ################################################################################
 
 After you downloaded the latest portable package of kivy on
@@ -23,24 +39,8 @@ to launch the python file with kivy.
 
 
 ################################################################################
-TouchContinuum instruction manual
+Instruction Manual
 ################################################################################
-
-Introduction:
---------------------------------------------------------------------------------
-
-NOTE: This application only features a MIDI output to connect to a hardware or
-software synthesizer. THERE ARE NO INTERNAL SOUNDS AT THE MOMENT!
-
-This application is a NUI (Natural User Interface) instrument in
-form of a virtual piano keyboard.
-It is able to handle pitch in a "continuous" manner. Means, you can drag a
-pressed note up and down the keyboard to change its pitch as well as back and
-forward to apply some modulation on the tone.
-
-The application is made in honor of the great but also costly Haaken Continuum
-Fingerboard.
-
 
 General:
 --------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ resolution resulting in a remarkable loading time the first time you open the
 panels.
 
 And remember: the selectable images are being loaded the first time you open
-the arrearance settings panels. So if you want to use your own images, you have
+the appearance settings panels. So if you want to use your own images, you have
 to restart the application.
 
 *: Items with a leading * are not yet implemented.
@@ -133,7 +133,7 @@ settings are turned back to default.
 
 
 ################################################################################
-Copyright
+Copyright and Contact
 ################################################################################
 
 TouchContinuum v1.0  Copyright (C) 2011  Cyril Stoller

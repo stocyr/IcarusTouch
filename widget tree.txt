@@ -25,7 +25,21 @@ TouchContinuumApp(App)
     |       +-> 2x Buttons
     |
     +-> Image "Keyboard"
+    |   |
+    |   +-> all existing Blobs (Image)
+    |   |
+    |   +-> all existing Keys (Stencil)
+    |
+    +-> MySettingsPanel
         |
-        +-> all existing Blobs (Image)
+        +-> ScrollView (left)
+        |   |
+        |   +-> GridLayout
+        |       |
+        |       +-> all the background images
         |
-        +-> all esisting Keys (Stencil)
+        +-> ScrollView (right)
+            |
+            +-> GridLayout
+                |
+                +-> all the keyboard images
