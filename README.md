@@ -1,8 +1,7 @@
 TouchContinuum
 ==============
 
-![GitHub Logo](/images/logo.png)
-Format: ![Alt Text](http://a1.sphotos.ak.fbcdn.net/hphotos-ak-snc7/310403_214944548564895_100001480546056_601152_1640058083_n.jpg?dl=1)
+![Blue Screen Shot](http://a1.sphotos.ak.fbcdn.net/hphotos-ak-snc7/310403_214944548564895_100001480546056_601152_1640058083_n.jpg?dl=1) ![Red Screen Shot](http://a7.sphotos.ak.fbcdn.net/hphotos-ak-ash4/304626_214944571898226_100001480546056_601153_671154876_n.jpg?dl=1) 
 
 READ THIS FIRST
 ---------------
