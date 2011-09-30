@@ -190,13 +190,15 @@ class TouchContinuumWidget(Widget):
         # X-Axis Key width scaling
         ##########################
         
+        '''
         # if it wasn't a button nor a key touch nor a settings touch, its a scroll touch.
         for search_touch in EventLoop.touches[:]:
-                    # but if there is already another touch in scroll mode (and not already in 'scale' mode), maybe the desired action is 'scale' not 'scroll'
-                    if 'scroll' in search_touch.ud and not self.scale_keywidth_touch_positions:
-                        # remember their actual positions
-                        self.scale_keywidth_touch_positions = {'initial_first': search_touch.x, 'initial_second': touch.x, 'first_touch': search_touch, 'second_touch': touch}
-                        print 'multiple saving position data'
+            # but if there is already another touch in scroll mode (and not already in 'scale' mode), maybe the desired action is 'scale' not 'scroll'
+            if 'scroll' in search_touch.ud and not self.scale_keywidth_touch_positions:
+                # remember their actual positions
+                self.scale_keywidth_touch_positions = {'initial_first': search_touch.x, 'initial_second': touch.x, 'first_touch': search_touch, 'second_touch': touch}
+                print 'multiple saving position data'
+        '''
         
         # assign the scroll-tag not until here. Thus we just get the other existing scroll-touches in the search-routine above.
         ud['scroll'] = True
@@ -219,13 +221,14 @@ class TouchContinuumWidget(Widget):
         # X-Axis Key width scaling
         ##########################
         
+        '''
         # if there are two fingers in scroll mode (thus the user dictionary key 'scale_keywidth_touch_positions' isn't empty) - maybe he wants to scale the keywidth?   
         scalepos = self.scale_keywidth_touch_positions
         if scalepos:
             delta_first_touch = scalepos['first_touch'].x - scalepos['initial_first']
             delta_second_touch = scalepos['second_touch'].x - scalepos['initial_second']
             
-            print 'move: delta_first = %s, delta_second = %s' % (delta_first_touch, delta_second_touch)
+            #print 'move: delta_first = %s, delta_second = %s' % (delta_first_touch, delta_second_touch)
             
             # if the user dragged both touches towards each other or vice versa
             if (delta_first_touch > SCALE_KEYWIDTH_THRESHOLD and delta_second_touch > -SCALE_KEYWIDTH_THRESHOLD) or \
@@ -238,8 +241,8 @@ class TouchContinuumWidget(Widget):
                     print 'zoom out'
                     # perform a ZOOM OUT with a factor applied to the delta_touch_distance:
                     delta_touch_distance = abs(delta_first_touch + (-delta_second_touch))
-                    #self.keyboard.key_width -= int(delta_touch_distance / SCALE_KEYWIDTH_FACTOR)
-                    #self.keyboard.width = 12*5*self.keyboard.key_width
+                    self.keyboard.key_width -= int(delta_touch_distance / SCALE_KEYWIDTH_FACTOR)
+                    self.keyboard.width = 12*5*self.keyboard.key_width
                     
                 # if the first touch was on the left and the user moved it left OR it was right and moved to the right, we want to make the keywidth smaller
                 elif (scalepos['initial_first'] < scalepos['initial_second'] and delta_first_touch < 0) or \
@@ -247,11 +250,11 @@ class TouchContinuumWidget(Widget):
                     print 'zoom in'
                     # perform a ZOOM IN in with a factor applied to the delta_touch_distance:
                     delta_touch_distance = abs(delta_first_touch + (-delta_second_touch))
-                    #self.keyboard.key_width += int(delta_touch_distance / SCALE_KEYWIDTH_FACTOR)
-                    #self.keyboard.width = 12*5*self.keyboard.key_width
-        
+                    self.keyboard.key_width += int(delta_touch_distance / SCALE_KEYWIDTH_FACTOR)
+                    self.keyboard.width = 12*5*self.keyboard.key_width
+        '''
                 
-        elif 'scroll' in ud:
+        if 'scroll' in ud:
             # move keyboard left or right.
             # nice side effect: if there is more than 1 touch in 'scroll' mode, scrolling is faster!
             scroll_factor = 1
@@ -292,7 +295,7 @@ class TouchContinuumWidget(Widget):
         # if there has been scale mode active or perhaps happening: (better would be: "and there aren't multiple 'scroll' mode touches active anymore
         if self.scale_keywidth_touch_positions:
             # delete all scale mode variables
-            print 'deleting the position data'
+            #print 'deleting the position data'
             self.scale_keywidth_touch_positions = {}
         
         if 'scroll' in ud:
