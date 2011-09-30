@@ -1,6 +1,9 @@
 TouchContinuum
 ==============
 
+![GitHub Logo](/images/logo.png)
+Format: ![Alt Text](http://a1.sphotos.ak.fbcdn.net/hphotos-ak-snc7/310403_214944548564895_100001480546056_601152_1640058083_n.jpg?dl=1)
+
 READ THIS FIRST
 ---------------
 
@@ -26,7 +29,7 @@ The application is made in honor of the great but also costly Haaken Continuum
 Fingerboard.
 
 NOTE: This application only features a MIDI output to connect to a hardware or
-software synthesizer. THERE ARE NO INTERNAL SOUNDS AT THE MOMENT!
+software synthesizer. **There are no internal sounds at the moment!**
 
 
 Getting Started under Windows
@@ -138,7 +141,8 @@ software tries to open the systems default MIDI device.
 Copyright and Contact
 ---------------------
 
-TouchContinuum v1.0  Copyright (C) 2011  Cyril Stoller
+TouchContinuum Copyright (C) 2011 Cyril Stoller
+
 This program comes with ABSOLUTELY NO WARRANTY. This is free software,
 and you are welcome to redistribute it under certain conditions;
 see the source code for details.

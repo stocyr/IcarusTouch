@@ -431,6 +431,9 @@ class TouchContinuumWidget(Widget):
     
     
     def background_image_change(self, dispatcher):
+        # first set the new background into the application settings:
+        self.app.config.set('Graphics', 'Background', dispatcher.background_normal)
+        
         old_background_instance = self.background
         
         # if the last background change is still in progress, stop it and start the new one.
@@ -475,8 +478,10 @@ class TouchContinuumWidget(Widget):
     
     
     def keyboard_image_change(self, dispatcher):
-        win = self.get_parent_window()
+        # first set the new keyboard into the application settings:
+        self.app.config.set('Graphics', 'Keyboard', dispatcher.background_normal)
         
+        win = self.get_parent_window()
         old_keyboard_instance = self.keyboard
         
         # if the last keyboard change is stil in progress, stop it and start the new.
