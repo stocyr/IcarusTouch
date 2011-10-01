@@ -137,7 +137,7 @@ class TouchContinuumWidget(Widget):
         self.keyboard = Keyboard(
             source=self.app.config.get('Graphics', 'Keyboard'),
             pos=(-540, 366),
-            size=(12*5*my_key_width, 468), # optimisation for small screens (e.g. smartphones): 468 if self.get_parent_window().height > (468 + self.get_parent_window().height * 0.3) else self.get_parent_window().height * 0.7
+            size=(12*5*my_key_width, 468), # optimization for small screens (e.g. smartphones): 468 if self.get_parent_window().height > (468 + self.get_parent_window().height * 0.3) else self.get_parent_window().height * 0.7
             border_width=BORDER_WIDTH,
             key_width=my_key_width)
         self.add_widget(self.keyboard)
@@ -421,18 +421,27 @@ class TouchContinuumWidget(Widget):
         
         # bind the background images to function
         for child in self.my_settings_panel.background_scroll_view_grid.children:
-            child.bind(on_press=self.background_image_change)
+            child.bind(on_press=self.background_image_change_request)
         
         # bind the keyboard images to function
         for child in self.my_settings_panel.keyboard_scroll_view_box.children:
-            child.bind(on_press=self.keyboard_image_change)
+            child.bind(on_press=self.keyboard_image_change_request)
         
         self.my_settings_panel.is_open = True  
     
     
-    def background_image_change(self, dispatcher):
+    def background_image_change_request(self, dispatcher):
+        self.background_image_change(dispatcher.background_normal)
+    
+    
+    def keyboard_image_change_request(self, dispatcher):
+        self.keyboard_image_change(dispatcher.background_normal)
+    
+    
+    def background_image_change(self, value):
         # first set the new background into the application settings:
-        self.app.config.set('Graphics', 'Background', dispatcher.background_normal)
+        self.app.config.set('Graphics', 'Background', value)
+        print 'set the background to %s' % value
         
         old_background_instance = self.background
         
@@ -447,7 +456,7 @@ class TouchContinuumWidget(Widget):
         
         # create the new image instance
         old_background_instance.new_background_instance = Background(
-            source=dispatcher.background_normal,
+            source=value,
             color=(1, 1, 1, 0))
         # add the new instance to the root widget. BUT add it on the bottom (therefore I set the index myself)
         self.float_layout.add_widget(old_background_instance.new_background_instance, index=len(self.float_layout.children))
@@ -477,9 +486,10 @@ class TouchContinuumWidget(Widget):
         self.background.background_is_animated = False
     
     
-    def keyboard_image_change(self, dispatcher):
+    def keyboard_image_change(self, value):
         # first set the new keyboard into the application settings:
-        self.app.config.set('Graphics', 'Keyboard', dispatcher.background_normal)
+        self.app.config.set('Graphics', 'Keyboard', value)
+        print 'set the keyboard to %s' % value
         
         win = self.get_parent_window()
         old_keyboard_instance = self.keyboard
@@ -495,7 +505,7 @@ class TouchContinuumWidget(Widget):
         
         # create the new image instance
         old_keyboard_instance.new_keyboard_instance = Keyboard(
-            source=dispatcher.background_normal,
+            source=value,
             pos=(old_keyboard_instance.x, win.height + BORDER_WIDTH),
             size=(self.keyboard.width, old_keyboard_instance.height),
             key_width=old_keyboard_instance.key_width,
@@ -566,8 +576,8 @@ class TouchContinuum(App):
         # create the various section for the .ini settings file:
         
         config.add_section('General')
-        config.set('General', 'YAxis', 'Aftertouch')
         config.set('General', 'PitchLock', 'Off')
+        config.set('General', 'YAxis', 'Aftertouch')
         config.set('General', 'MonoMode', 'Legato') # inactive if voice mode is 'polyphonic'
         
         
@@ -599,6 +609,8 @@ class TouchContinuum(App):
         config.set('Advanced', 'MovementDecay', '0.2')
         
         config.set('Advanced', 'ShowPitchLine', 'Off')
+        
+        
     
     
     def build_settings(self, settings):
@@ -685,7 +697,7 @@ class TouchContinuum(App):
         elif token == ('MIDI', 'Device'):
             self.touchcontinuumwidget.set_midi_device()
         elif token == ('MIDI', 'Channel'):
-            # setting the value to 0 here causes an error?!
+            # TODO: setting the value to 0 here causes an error?!
             # config.set('MIDI', 'Channel', boundary(value, 0, 15)
             pass
         elif token == ('MIDI', 'VoiceMode'):

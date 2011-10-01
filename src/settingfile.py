@@ -77,7 +77,7 @@ class SettingFile(SettingItem):
         self.popup = None
         value = self.fileChooser.selection
         # if the value was empty, don't change anything.
-        if value == '':
+        if value == None or value == '':
             return
         self.value = value
     
@@ -91,7 +91,7 @@ class SettingFile(SettingItem):
         self.scrollView = scrollView = ScrollView()
         
         # then, create the fileChooser and integrate it in the scrollView
-        self.fileChooser = fileChooser = FileChooserListView(path=self.path,
+        self.fileChooser = fileChooser = FileChooserListView(#path=self.path, --> causes errors!
                                                              filters=self.file_filter,
                                                              size_hint_y=None)
         fileChooser.height = 500   # TODO: UGLY!
