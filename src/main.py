@@ -330,6 +330,7 @@ class TouchContinuumWidget(Widget):
             self.app.config.set('General', 'YAxis', 'Aftertouch')
             # lock Y-modulation to 127
             self.midi_out.write_short(0xB0, 1, 127)
+        self.app.config.write()
     
     def on_pitch_lock_button_press(self):
         # apply the visible button-state also to the application settings
@@ -337,6 +338,7 @@ class TouchContinuumWidget(Widget):
             self.app.config.set('General', 'PitchLock', 'On')
         else:
             self.app.config.set('General', 'PitchLock', 'Off')
+        self.app.config.write()
     
     def open_settings(self):
         # is called from the rightmost button (the "setup" button") --> function call binding in the .kv file
@@ -445,6 +447,7 @@ class TouchContinuumWidget(Widget):
     def background_image_change(self, value):
         # first set the new background into the application settings:
         self.app.config.set('Graphics', 'Background', value)
+        self.app.config.write()
         
         old_background_instance = self.background
         
@@ -492,6 +495,7 @@ class TouchContinuumWidget(Widget):
     def keyboard_image_change(self, value):
         # first set the new keyboard into the application settings:
         self.app.config.set('Graphics', 'Keyboard', value)
+        self.app.config.write()
         
         win = self.get_parent_window()
         old_keyboard_instance = self.keyboard
@@ -577,18 +581,18 @@ class TouchContinuum(App):
     def build_config(self, config):
         # create the various section for the .ini settings file:
         
-        config.add_section('General')
+        config.adddefaultsection('General')
         config.setdefault('General', 'PitchLock', 'Off')
         config.setdefault('General', 'YAxis', 'Aftertouch')
         config.setdefault('General', 'MonoMode', 'Legato') # inactive if voice mode is 'polyphonic'
         
         
-        config.add_section('Graphics')
+        config.adddefaultsection('Graphics')
         config.setdefault('Graphics', 'Keyboard', 'keyboards/keyboard_blue2_shadow.png')
         config.setdefault('Graphics', 'Background', 'backgrounds/cold blue/background_blue_cold3.jpg')
 
         
-        config.add_section('MIDI')
+        config.adddefaultsection('MIDI')
         config.setdefault('MIDI', 'Device', 'USB Uno MIDI Interface')
         config.setdefault('MIDI', 'Channel', '0')
         config.setdefault('MIDI', 'VoiceMode', 'Polyphonic')
@@ -598,7 +602,7 @@ class TouchContinuum(App):
         
         
         # the Advanced section contains mainly values used for debugging and optimizing
-        config.add_section('Advanced')
+        config.adddefaultsection('Advanced')
         config.setdefault('Advanced', 'BlobImage', 'images/blob_blue.png')
         config.setdefault('Advanced', 'BlobSize', '60')
         config.setdefault('Advanced', 'CircleImage', 'images/circle.png')
