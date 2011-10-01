@@ -1,4 +1,4 @@
 *.project
 *.pydevproject
 *.pyc
-touchcontinuum.ini
+*touchcontinuum.ini

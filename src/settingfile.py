@@ -72,12 +72,12 @@ class SettingFile(SettingItem):
             return
         self.bind(on_release=self._create_popup)
 
-    def _validate(self, instance):
+    def _validate(self, fileChooserInstance, selected, touch):
         self.popup.dismiss()
         self.popup = None
-        value = self.fileChooser.selection
+        value = selected[0]
         # if the value was empty, don't change anything.
-        if value == None or value == '':
+        if value == '':
             return
         self.value = value
     
@@ -91,9 +91,10 @@ class SettingFile(SettingItem):
         self.scrollView = scrollView = ScrollView()
         
         # then, create the fileChooser and integrate it in the scrollView
-        self.fileChooser = fileChooser = FileChooserListView(#path=self.path, --> causes errors!
+        self.fileChooser = fileChooser = FileChooserListView(path=self.path, # TODO: --> causes errors if you go more than one directory UP!
                                                              filters=self.file_filter,
                                                              size_hint_y=None)
+        fileChooser.bind(on_submit=self._validate)
         fileChooser.height = 500   # TODO: UGLY!
         scrollView.add_widget(fileChooser)
         
@@ -104,11 +105,9 @@ class SettingFile(SettingItem):
         
         # 2 buttons are created for accept or cancel the current value
         btnlayout = BoxLayout(size_hint_y=None, height=50, spacing=5)
-        btn = Button(text='Ok')
-        btn.bind(on_release=self._validate)
-        btnlayout.add_widget(btn)
+        btnlayout.add_widget(Widget())
         
-        btn = Button(text='Cancel')
+        btn = Button(text='Cancel', width=100, size_hint_x=None)
         btn.bind(on_release=popup.dismiss)
         btnlayout.add_widget(btn)
         content.add_widget(btnlayout)

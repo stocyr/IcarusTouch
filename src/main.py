@@ -170,8 +170,7 @@ class TouchContinuumWidget(Widget):
                 return super(TouchContinuumWidget, self).on_touch_down(touch)
             else:
                 # user has clicked aside - he wants to quit the settings.
-                self.remove_widget(self.my_settings_panel)
-                self.my_settings_panel.is_open = False
+                self.close_my_settings_panel()
                 return True
             
         elif self.keyboard.collide_point(*touch.pos):
@@ -430,6 +429,11 @@ class TouchContinuumWidget(Widget):
         self.my_settings_panel.is_open = True  
     
     
+    def close_my_settings_panel(self):
+        self.remove_widget(self.my_settings_panel)
+        self.my_settings_panel.is_open = False
+    
+    
     def background_image_change_request(self, dispatcher):
         self.background_image_change(dispatcher.background_normal)
     
@@ -441,7 +445,6 @@ class TouchContinuumWidget(Widget):
     def background_image_change(self, value):
         # first set the new background into the application settings:
         self.app.config.set('Graphics', 'Background', value)
-        print 'set the background to %s' % value
         
         old_background_instance = self.background
         
@@ -489,7 +492,6 @@ class TouchContinuumWidget(Widget):
     def keyboard_image_change(self, value):
         # first set the new keyboard into the application settings:
         self.app.config.set('Graphics', 'Keyboard', value)
-        print 'set the keyboard to %s' % value
         
         win = self.get_parent_window()
         old_keyboard_instance = self.keyboard
@@ -576,39 +578,39 @@ class TouchContinuum(App):
         # create the various section for the .ini settings file:
         
         config.add_section('General')
-        config.set('General', 'PitchLock', 'Off')
-        config.set('General', 'YAxis', 'Aftertouch')
-        config.set('General', 'MonoMode', 'Legato') # inactive if voice mode is 'polyphonic'
+        config.setdefault('General', 'PitchLock', 'Off')
+        config.setdefault('General', 'YAxis', 'Aftertouch')
+        config.setdefault('General', 'MonoMode', 'Legato') # inactive if voice mode is 'polyphonic'
         
         
         config.add_section('Graphics')
-        config.set('Graphics', 'Keyboard', 'keyboards/keyboard_blue2_shadow.png')
-        config.set('Graphics', 'Background', 'backgrounds/cold blue/background_blue_cold3.jpg')
+        config.setdefault('Graphics', 'Keyboard', 'keyboards/keyboard_blue2_shadow.png')
+        config.setdefault('Graphics', 'Background', 'backgrounds/cold blue/background_blue_cold3.jpg')
 
         
         config.add_section('MIDI')
-        config.set('MIDI', 'Device', 'USB Uno MIDI Interface')
-        config.set('MIDI', 'Channel', '0')
-        config.set('MIDI', 'VoiceMode', 'Polyphonic')
-        config.set('MIDI', 'PitchbendRange', '24')
-        config.set('MIDI', 'Transpose', '36')
-        config.set('MIDI', 'CCController', '1') # inactive if y-axis is 'aftertouch'
+        config.setdefault('MIDI', 'Device', 'USB Uno MIDI Interface')
+        config.setdefault('MIDI', 'Channel', '0')
+        config.setdefault('MIDI', 'VoiceMode', 'Polyphonic')
+        config.setdefault('MIDI', 'PitchbendRange', '24')
+        config.setdefault('MIDI', 'Transpose', '36')
+        config.setdefault('MIDI', 'CCController', '1') # inactive if y-axis is 'aftertouch'
         
         
         # the Advanced section contains mainly values used for debugging and optimizing
         config.add_section('Advanced')
-        config.set('Advanced', 'BlobImage', 'images/blob_blue.png')
-        config.set('Advanced', 'BlobSize', '60')
-        config.set('Advanced', 'CircleImage', 'images/circle.png')
-        config.set('Advanced', 'CircleSize', '60')
-        config.set('Advanced', 'KeyImage', 'images/key_sw.png')
+        config.setdefault('Advanced', 'BlobImage', 'images/blob_blue.png')
+        config.setdefault('Advanced', 'BlobSize', '60')
+        config.setdefault('Advanced', 'CircleImage', 'images/circle.png')
+        config.setdefault('Advanced', 'CircleSize', '60')
+        config.setdefault('Advanced', 'KeyImage', 'images/key_sw.png')
         
-        config.set('Advanced', 'RoundingSchedulerInterval', '0.01')
-        config.set('Advanced', 'RoundSpeedToFinger', '0.6')
-        config.set('Advanced', 'RoundSpeedToKey', '0.2')
-        config.set('Advanced', 'MovementDecay', '0.2')
+        config.setdefault('Advanced', 'RoundingSchedulerInterval', '0.01')
+        config.setdefault('Advanced', 'RoundSpeedToFinger', '0.6')
+        config.setdefault('Advanced', 'RoundSpeedToKey', '0.2')
+        config.setdefault('Advanced', 'MovementDecay', '0.2')
         
-        config.set('Advanced', 'ShowPitchLine', 'Off')
+        config.setdefault('Advanced', 'ShowPitchLine', 'Off')
         
         
     
@@ -689,9 +691,11 @@ class TouchContinuum(App):
         elif token == ('Graphics', 'Background'):
             # change the background image like with an opened mySettingsPanel
             self.touchcontinuumwidget.background_image_change(value)
+            self.touchcontinuumwidget.close_my_settings_panel()
         elif token == ('Graphics', 'Keyboard'):
             # change the keyboard image like with an opened mySettingsPanel
             self.touchcontinuumwidget.keyboard_image_change(value)
+            self.touchcontinuumwidget.close_my_settings_panel()
         
         
         elif token == ('MIDI', 'Device'):
