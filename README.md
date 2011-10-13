@@ -1,5 +1,7 @@
-TouchContinuum
+IcarusTouch
 ==============
+
+(former named *TouchContinuum*)
 
 ![blue](http://a6.sphotos.ak.fbcdn.net/hphotos-ak-ash4/299067_222700637789286_100001480546056_629480_1690295720_n.jpg?dl=1)__
 ![hot](http://a5.sphotos.ak.fbcdn.net/hphotos-ak-snc7/311805_222700691122614_100001480546056_629484_266904590_n.jpg?dl=1)
@@ -27,7 +29,7 @@ http://kivy.org/docs/installation/installation.html
 heavily summarized version of the above one.
 
 
-About TouchContinuum
+About IcarusTouch
 --------------------
 
 This application is a multitouch instrument in form of a virtual piano keyboard.
@@ -142,7 +144,7 @@ can be set in the application settings. If you open the selection list for this
 settings item, only the following devices are displayed:
 
 * Output devices
-* Devices which are not opened (except for the device opened by TouchContinuum)
+* Devices which are not opened (except for the device opened by IcarusTouch)
 
 If the preferred MIDI device could not be opened because it does not exist, the
 software tries to open the systems default MIDI device.
@@ -151,7 +153,7 @@ software tries to open the systems default MIDI device.
 Copyright and Contact
 ---------------------
 
-TouchContinuum Copyright (C) 2011 Cyril Stoller
+IcarusTouch Copyright (C) 2011 Cyril Stoller
 
 This program comes with ABSOLUTELY NO WARRANTY. This is free software,
 and you are welcome to redistribute it under certain conditions;

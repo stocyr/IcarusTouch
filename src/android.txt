@@ -1,3 +1,3 @@
-title=TouchContinuum 1.0
+title=IcarusTouch 1.0
 author=Cyril Stoller
 orientation=landscape

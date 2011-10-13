@@ -1,25 +1,25 @@
 '''
-TouchContinuum
+IcarusTouch
 
 Copyright (C) 2011  Cyril Stoller
 
 For comments, suggestions or other messages, contact me at:
 <cyril.stoller@gmail.com>
 
-This file is part of TouchContinuum.
+This file is part of IcarusTouch.
 
-TouchContinuum is free software: you can redistribute it and/or modify
+IcarusTouch is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-TouchContinuum is distributed in the hope that it will be useful,
+IcarusTouch is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with TouchContinuum.  If not, see <http://www.gnu.org/licenses/>.
+along with IcarusTouch.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 
@@ -100,7 +100,7 @@ class Feedback(Image):
 ##
 ####################################
 '''
-class TouchContinuumWidget(Widget):
+class IcarusTouchWidget(Widget):
     app = ObjectProperty(None)
     float_layout = ObjectProperty(None)
     pitch_lock_button = ObjectProperty(None)
@@ -120,7 +120,7 @@ class TouchContinuumWidget(Widget):
     ####################################
     '''
     def __init__(self, **kwargs):
-        super(TouchContinuumWidget, self).__init__(**kwargs) # don't know if this is necessary?
+        super(IcarusTouchWidget, self).__init__(**kwargs) # don't know if this is necessary?
         
         # add background image (and add it in the BACKGROUND! --> index modification)
         self.background = Background(source=self.app.config.get('Graphics', 'Background'))
@@ -167,7 +167,7 @@ class TouchContinuumWidget(Widget):
             if self.my_settings_panel.keyboard_scroll_view_box.collide_point(*touch.pos) or \
                 self.my_settings_panel.background_scroll_view_grid.collide_point(*touch.pos):
                 ud['settingspanel'] = True
-                return super(TouchContinuumWidget, self).on_touch_down(touch)
+                return super(IcarusTouchWidget, self).on_touch_down(touch)
             else:
                 # user has clicked aside - he wants to quit the settings.
                 self.close_my_settings_panel()
@@ -175,7 +175,7 @@ class TouchContinuumWidget(Widget):
             
         elif self.keyboard.collide_point(*touch.pos):
             # if the user touched on the keyboard, feed the touch to the keyboard.
-            return super(TouchContinuumWidget, self).on_touch_down(touch)
+            return super(IcarusTouchWidget, self).on_touch_down(touch)
         
         elif self.pitch_lock_button.collide_point(*touch.pos) or \
             self.y_axis_volume_button.collide_point(*touch.pos) or \
@@ -183,7 +183,7 @@ class TouchContinuumWidget(Widget):
             self.settings_button.collide_point(*touch.pos):
             # if the user touched one of the buttons, feed the touch to the buttons
             self.create_circle(touch)
-            return super(TouchContinuumWidget, self).on_touch_down(touch)
+            return super(IcarusTouchWidget, self).on_touch_down(touch)
         
         ##########################
         # X-Axis Key width scaling
@@ -274,7 +274,7 @@ class TouchContinuumWidget(Widget):
         
         # if the touch was started on the keyboard
         if 'initial_key' in ud or 'settingspanel' in ud:
-            return super(TouchContinuumWidget, self).on_touch_move(touch)
+            return super(IcarusTouchWidget, self).on_touch_move(touch)
     
     
     '''
@@ -308,7 +308,7 @@ class TouchContinuumWidget(Widget):
                 self.keyboard.keyboard_x_animation.start(self.keyboard)
         
         if 'initial_key' in ud:
-            return super(TouchContinuumWidget, self).on_touch_up(touch)
+            return super(IcarusTouchWidget, self).on_touch_up(touch)
     
     
     '''
@@ -550,14 +550,14 @@ class TouchContinuumWidget(Widget):
 ##
 ####################################
 '''
-class TouchContinuum(App):
-    title = 'TouchContinuum'
+class IcarusTouch(App):
+    title = 'IcarusTouch'
     icon = 'icon.png'
     
     
     def build(self):
         # print the application informations
-        print '\nTouchContinuum v%s  Copyright (C) 2011  Cyril Stoller' % VERSION
+        print '\nIcarusTouch v%s  Copyright (C) 2011  Cyril Stoller' % VERSION
         print 'This program comes with ABSOLUTELY NO WARRANTY'
         print 'This is free software, and you are welcome to redistribute it'
         print 'under certain conditions; see the source code for details.\n'
@@ -574,8 +574,8 @@ class TouchContinuum(App):
         print 'Loading images... Please wait.'
         
         # create the root widget and give it a reference of the application instance (so it can access the application settings)
-        self.touchcontinuumwidget = TouchContinuumWidget(app=self)
-        return self.touchcontinuumwidget
+        self.icarustouchwidget = IcarusTouchWidget(app=self)
+        return self.icarustouchwidget
     
    
     def build_config(self, config):
@@ -682,28 +682,28 @@ class TouchContinuum(App):
         
         if token == ('General', 'YAxis'):
             # set the buttons to sync up with the settings
-            self.touchcontinuumwidget.y_axis_volume_button.state = 'normal' if value == 'Aftertouch' else 'down'
-            self.touchcontinuumwidget.on_y_axis_volume_button_press()
+            self.icarustouchwidget.y_axis_volume_button.state = 'normal' if value == 'Aftertouch' else 'down'
+            self.icarustouchwidget.on_y_axis_volume_button_press()
         elif token == ('General', 'PitchLock'):
             # set the buttons to sync up with the settings
-            self.touchcontinuumwidget.pitch_lock_button.state = 'normal' if value == 'Off' else 'down'
-            self.touchcontinuumwidget.on_pitch_lock_button_press()
+            self.icarustouchwidget.pitch_lock_button.state = 'normal' if value == 'Off' else 'down'
+            self.icarustouchwidget.on_pitch_lock_button_press()
         elif token == ('General', 'MonoMode'): # inactive if voice mode is 'polyphonic'
             pass
         
         
         elif token == ('Graphics', 'Background'):
             # change the background image like with an opened mySettingsPanel
-            self.touchcontinuumwidget.background_image_change(value)
-            self.touchcontinuumwidget.close_my_settings_panel()
+            self.icarustouchwidget.background_image_change(value)
+            self.icarustouchwidget.close_my_settings_panel()
         elif token == ('Graphics', 'Keyboard'):
             # change the keyboard image like with an opened mySettingsPanel
-            self.touchcontinuumwidget.keyboard_image_change(value)
-            self.touchcontinuumwidget.close_my_settings_panel()
+            self.icarustouchwidget.keyboard_image_change(value)
+            self.icarustouchwidget.close_my_settings_panel()
         
         
         elif token == ('MIDI', 'Device'):
-            self.touchcontinuumwidget.set_midi_device()
+            self.icarustouchwidget.set_midi_device()
         elif token == ('MIDI', 'Channel'):
             # TODO: setting the value to 0 here causes an error?!
             # config.set('MIDI', 'Channel', boundary(value, 0, 15)
@@ -759,5 +759,5 @@ class TouchContinuum(App):
 
 
 if __name__ in ('__main__', '__android__'):
-    TouchContinuum().run()
+    IcarusTouch().run()
     

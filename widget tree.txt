@@ -1,6 +1,6 @@
-TouchContinuumApp(App)
+IcarusTouchApp(App)
 |
-+-> TouchContinuumWidget(Widget)
++-> IcarusTouchWidget(Widget)
     |
     +-> Image "Background"
     |
