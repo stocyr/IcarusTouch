@@ -150,6 +150,13 @@ If the preferred MIDI device could not be opened because it does not exist, the
 software tries to open the systems default MIDI device.
 
 
+### Hardware Requirements
+
+You can use any of the touch inputs supported by the kivy framework
+(http://kivy.org/docs/api-kivy.input.providers.html). You can also use your
+mouse to control it if you like to.
+
+
 Copyright and Contact
 ---------------------
 

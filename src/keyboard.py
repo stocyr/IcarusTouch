@@ -538,4 +538,10 @@ class Keyboard(Image):
         # pitch values per pixel: 170.6667 / 50 = 3.41333  = 8192 / (24 * 50)
         pitch_value = int(pixel_distance * 8192.0 / (self.parent.app.config.getint('MIDI', 'PitchBendRange') * self.key_width) + 0.5) + 8192 # (center/normal = 8192)
         
+        # if the pitch value exceeds the allowed range of 0 to 16383, hold him at the lowest / highest end.
+        if pitch_value > 16383:
+            pitch_value = 16383
+        elif pitch_value < 0:
+            pitch_value = 0
+        
         self.parent.midi_out.write_short(0xE0 + self.parent.app.config.getint('MIDI', 'Channel'), pitch_value - int(pitch_value / 128) * 128, int(pitch_value / 128))
