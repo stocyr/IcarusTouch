@@ -26,7 +26,7 @@ along with IcarusTouch.  If not, see <http://www.gnu.org/licenses/>.
 import pygame.midi
 
 import kivy
-kivy.require('1.0.7')
+kivy.require('1.0.8')
 
 from kivy.app import App
 from kivy.config import Config
@@ -640,8 +640,7 @@ class IcarusTouch(App):
         settings.add_json_panel(
             'Graphics', self.config, data='''[
                     { "type": "file", "title": "Keyboard", "desc": "Image used as keyboard", "section": "Graphics", "key": "Keyboard", "file_filter": ["*.png", "*.jpg"], "path": "keyboards"},
-                    { "type": "file", "title": "Background", "desc": "Image used as background", "section": "Graphics", "key": "Background", "file_filter": ["*.png", "*.jpg"], "path": "backgrounds"},
-                    { "type": "title", "title": "(Settings marked with a * are not yet implemented)" }
+                    { "type": "file", "title": "Background", "desc": "Image used as background", "section": "Graphics", "key": "Background", "file_filter": ["*.png", "*.jpg"], "path": "backgrounds"}
             ]''')
         
         #section "MIDI"
@@ -671,8 +670,7 @@ class IcarusTouch(App):
                     { "type": "numeric", "title": "Round speed to key", "desc": "How fast the tone snaps to the middle of the key if movement has stopped", "section": "Advanced", "key": "RoundSpeedToKey"},
                     { "type": "numeric", "title": "Movement decay time", "desc": "How long you have to wait after finger movement to have the tone snapped to the key", "section": "Advanced", "key": "MovementDecay"},
                 { "type": "title", "title": "Debug section" },
-                    { "type": "bool", "title": "Show pitch line", "desc": "Show a line that indicates the pitch sent to the MIDI device", "section": "Advanced", "key": "ShowPitchLine", "values": ["Off", "On"]},
-                { "type": "title", "title": "(Settings marked with a * are not yet implemented)" }
+                    { "type": "bool", "title": "Show pitch line", "desc": "Show a line that indicates the pitch sent to the MIDI device", "section": "Advanced", "key": "ShowPitchLine", "values": ["Off", "On"]}
             ]''')
     
     
