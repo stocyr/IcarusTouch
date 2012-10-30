@@ -3,18 +3,18 @@ IcarusTouch
 
 (former named *TouchContinuum*)
 
-![blue](http://a6.sphotos.ak.fbcdn.net/hphotos-ak-ash4/299067_222700637789286_100001480546056_629480_1690295720_n.jpg?dl=1)__
-![hot](http://a5.sphotos.ak.fbcdn.net/hphotos-ak-snc7/311805_222700691122614_100001480546056_629484_266904590_n.jpg?dl=1)
+![blue](/stocyr/IcarusTouch/graphics/blue.jpg)__
+![hot](/stocyr/IcarusTouch/graphics/hot.jpg)
 
-![cold](http://a8.sphotos.ak.fbcdn.net/hphotos-ak-ash4/303941_222700671122616_100001480546056_629483_2090968175_n.jpg?dl=1)__
-![warm](http://a4.sphotos.ak.fbcdn.net/hphotos-ak-snc7/316868_222700654455951_100001480546056_629481_1168308683_n.jpg?dl=1)
+![cold](/stocyr/IcarusTouch/graphics/cold.jpg)__
+![warm](/stocyr/IcarusTouch/graphics/warm.jpg)
 
 
-![appearance panel](http://a3.sphotos.ak.fbcdn.net/hphotos-ak-snc7/302045_222700711122612_100001480546056_629485_1168915418_n.jpg?dl=1)__
-![settings panel](http://a1.sphotos.ak.fbcdn.net/hphotos-ak-snc7/297911_222700724455944_100001480546056_629486_1335669365_n.jpg?dl=1)
+![appearance panel](/stocyr/IcarusTouch/graphics/appearance_panel.jpg)__
+![settings panel](/stocyr/IcarusTouch/graphics/settings_panel.jpg)
 
-![midi settings](http://a7.sphotos.ak.fbcdn.net/hphotos-ak-ash4/309539_222700734455943_100001480546056_629487_810765182_n.jpg?dl=1)__
-![file settings](http://a8.sphotos.ak.fbcdn.net/hphotos-ak-ash4/310184_222700747789275_100001480546056_629488_1421361828_n.jpg?dl=1)
+![midi settings](/stocyr/IcarusTouch/graphics/midi_settings.jpg)__
+![file settings](/stocyr/IcarusTouch/graphics/file_settings.jpg)
 
 READ THIS FIRST
 ---------------
