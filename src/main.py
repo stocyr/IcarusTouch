@@ -26,7 +26,7 @@ along with IcarusTouch.  If not, see <http://www.gnu.org/licenses/>.
 import pygame.midi
 
 import kivy
-kivy.require('1.0.9')
+kivy.require('1.7.0')
 
 from kivy.app import App
 from kivy.config import Config
