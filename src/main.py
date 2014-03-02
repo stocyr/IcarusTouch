@@ -26,12 +26,13 @@ along with IcarusTouch.  If not, see <http://www.gnu.org/licenses/>.
 import pygame.midi
 
 import kivy
-kivy.require('1.0.8')
+kivy.require('1.0.9')
 
 from kivy.app import App
 from kivy.config import Config
 # for making screenshots with F12:
 Config.set('modules', 'keybinding', '')
+Config.set('modules', 'inspector', '')
 from kivy.base import EventLoop
 from kivy.animation import Animation
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty
@@ -136,7 +137,7 @@ class IcarusTouchWidget(Widget):
         my_key_width = KEY_WIDTH
         self.keyboard = Keyboard(
             source=self.app.config.get('Graphics', 'Keyboard'),
-            pos=(-540, 366),
+            pos=(-540, 230), # 366
             size=(12*5*my_key_width, 468), # optimization for small screens (e.g. smartphones): 468 if self.get_parent_window().height > (468 + self.get_parent_window().height * 0.3) else self.get_parent_window().height * 0.7
             border_width=BORDER_WIDTH,
             key_width=my_key_width)
@@ -271,6 +272,7 @@ class IcarusTouchWidget(Widget):
             # apply the scroll action
             self.keyboard.x += touch.dx * scroll_factor
             return
+        
         
         # if the touch was started on the keyboard
         if 'initial_key' in ud or 'settingspanel' in ud:
@@ -599,6 +601,7 @@ class IcarusTouch(App):
         config.setdefault('MIDI', 'PitchbendRange', '24')
         config.setdefault('MIDI', 'Transpose', '36')
         config.setdefault('MIDI', 'CCController', '1') # inactive if y-axis is 'aftertouch'
+        config.setdefault('MIDI', 'Velocity', '127')
         
         
         # the Advanced section contains mainly values used for debugging and optimizing
@@ -652,6 +655,7 @@ class IcarusTouch(App):
                     { "type": "numeric", "title": "Pitch bend range", "desc": "Set the pitch bend range of your synthesizer here (set it as high as possible!) [in half tones]", "section": "MIDI", "key": "PitchbendRange"},
                     { "type": "numeric", "title": "Transpose", "desc": "Transpose the keyboard [in half tones, only positive!]", "section": "MIDI", "key": "Transpose"},
                     { "type": "numeric", "title": "CC controller", "desc": "CC controller to use for changing the volume with the y axis [1 - 127]", "section": "MIDI", "key": "CCController"},
+                    { "type": "numeric", "title": "Velocity", "desc": "Velocity of the midi notes", "section": "MIDI", "key": "Velocity"},
                 { "type": "title", "title": "(Settings marked with a * are not yet implemented)" }
             ]''')
         
@@ -713,6 +717,8 @@ class IcarusTouch(App):
         elif token == ('MIDI', 'Transpose'):
             pass
         elif token == ('MIDI', 'CCController'): # inactive if y-axis is 'aftertouch'
+            pass
+        elif token == ('MIDI', 'Velocity'):
             pass
         
         

@@ -486,7 +486,7 @@ class Keyboard(Image):
                 if 'initial_key' in search_touch.ud and search_touch.ud['initial_key']['keynumber]' != note:
                     self.parent.midi_out.note_off(search_touch.ud['initial_key']['keynumber]' + self.parent.app.config.getint('MIDI', 'Transpose'), 0, 0)
         '''
-        self.parent.midi_out.note_on(note + self.parent.app.config.getint('MIDI', 'Transpose'), 127, self.parent.app.config.getint('MIDI', 'Channel'))
+        self.parent.midi_out.note_on(note + self.parent.app.config.getint('MIDI', 'Transpose'), self.parent.app.config.getint('MIDI', 'Velocity'), self.parent.app.config.getint('MIDI', 'Channel'))
     
     
     def midi_note_off(self, note): # midi_note_off(self, note , touch):

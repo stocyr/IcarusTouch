@@ -104,7 +104,7 @@ class MySettingsPanel(Widget):
                 self.background_scroll_view_grid.add_widget(picture)
                 
             except Exception, e:
-                print 'Background images: Unable to load <%s>. Reason: %s' % (filename, e)
+                print 'Background image: Unable to load <%s>. Reason: %s' % (filename, e)
         
         # fill the keyboard selector with images
         for filename in glob(join(curdir, 'keyboards', 'keyboard_*')):
@@ -120,4 +120,4 @@ class MySettingsPanel(Widget):
                 self.keyboard_scroll_view_box.add_widget(picture)
                 
             except Exception, e:
-                print 'Keyboard images: Unable to load <%s>. Reason: %s' % (filename, e)
+                print 'Keyboard image: Unable to load <%s>. Reason: %s' % (filename, e)
