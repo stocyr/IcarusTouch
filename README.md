@@ -3,17 +3,17 @@ IcarusTouch
 
 (former named *TouchContinuum*)
 
-![blue](graphics/blue.jpg)__
+![blue](graphics/blue.jpg)
 ![hot](graphics/hot.jpg)
 
-![cold](graphics/cold.jpg)__
+![cold](graphics/cold.jpg)
 ![warm](graphics/warm.jpg)
 
 
-![appearance panel](graphics/appearance_panel.jpg)__
+![appearance panel](graphics/appearance_panel.jpg)
 ![settings panel](graphics/settings_panel.jpg)
 
-![midi settings](graphics/midi_settings.jpg)__
+![midi settings](graphics/midi_settings.jpg)
 ![file settings](graphics/file_settings.jpg)
 
 READ THIS FIRST
