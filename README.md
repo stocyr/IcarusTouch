@@ -3,18 +3,18 @@ IcarusTouch
 
 (former named *TouchContinuum*)
 
-![blue](/stocyr/IcarusTouch/graphics/blue.jpg)__
-![hot](/stocyr/IcarusTouch/graphics/hot.jpg)
+![blue](graphics/blue.jpg)__
+![hot](graphics/hot.jpg)
 
-![cold](/stocyr/IcarusTouch/graphics/cold.jpg)__
-![warm](/stocyr/IcarusTouch/graphics/warm.jpg)
+![cold](graphics/cold.jpg)__
+![warm](graphics/warm.jpg)
 
 
-![appearance panel](/stocyr/IcarusTouch/graphics/appearance_panel.jpg)__
-![settings panel](/stocyr/IcarusTouch/graphics/settings_panel.jpg)
+![appearance panel](graphics/appearance_panel.jpg)__
+![settings panel](graphics/settings_panel.jpg)
 
-![midi settings](/stocyr/IcarusTouch/graphics/midi_settings.jpg)__
-![file settings](/stocyr/IcarusTouch/graphics/file_settings.jpg)
+![midi settings](graphics/midi_settings.jpg)__
+![file settings](graphics/file_settings.jpg)
 
 READ THIS FIRST
 ---------------
